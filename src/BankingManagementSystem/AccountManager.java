@@ -17,13 +17,13 @@ class AccountManager{
         double amount = sc.nextDouble();
         sc.nextLine();
         System.out.print("Enter Security Pin: ");
-        String securityPin = sc.nextLine();
+        int pin = sc.nextInt();
         try {
             con.setAutoCommit(false);
             if (accountNumber != 0) {
                 PreparedStatement stmt = con.prepareStatement("SELECT * FROM Account WHERE account_number=? AND security_pin=?");
                 stmt.setLong(1, accountNumber);
-                stmt.setString(2, securityPin);
+                stmt.setString(2, encryptSecurityPin(pin));
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
                     String creditQuery = "UPDATE Account SET balance=balance+? WHERE account_number=?";
@@ -53,13 +53,13 @@ class AccountManager{
         double amount = sc.nextDouble();
         sc.nextLine();
         System.out.print("Enter Security Pin: ");
-        String securityPin = sc.nextLine();
+        int pin=sc.nextInt();
         try {
             con.setAutoCommit(false);
             if (accountNumber != 0) {
                 PreparedStatement stmt = con.prepareStatement("SELECT * FROM Account WHERE account_number=? AND security_pin=?");
                 stmt.setLong(1, accountNumber);
-                stmt.setString(2, securityPin);
+                stmt.setString(2, encryptSecurityPin(pin));
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
                     double currentBalance = rs.getDouble("balance");
@@ -97,13 +97,13 @@ class AccountManager{
         double amount=sc.nextDouble();
         sc.nextLine();
         System.out.print("Enter Security Pin: ");
-        String securityPin=sc.nextLine();
+        int pin=sc.nextInt();
         try{
             con.setAutoCommit(false);
             if(senderAccountNumber!=0 && receiverAccountNumber!=0){
                 PreparedStatement stmt=con.prepareStatement("SELECT * FROM Account WHERE account_number=? AND security_pin=?");
                 stmt.setLong(1,senderAccountNumber);
-                stmt.setString(2,securityPin);
+                stmt.setString(2,encryptSecurityPin(pin));
                 ResultSet rs=stmt.executeQuery();
                 if(rs.next()){
                     double currentAmount=rs.getDouble("balance");
@@ -141,14 +141,14 @@ class AccountManager{
     public void checkBalance(long accountNumber){
         sc.nextLine();
         System.out.print("Enter Security Pin: ");
-        String securityPin=sc.nextLine();
+        int pin=sc.nextInt();
         try{
             PreparedStatement stmt=con.prepareStatement("SELECT balance FROM Account WHERE account_number=? AND security_pin=?");
             stmt.setLong(1,accountNumber);
-            stmt.setString(2,securityPin);
+            stmt.setString(2,encryptSecurityPin(pin));
             ResultSet rs=stmt.executeQuery();
             if(rs.next()){
-                System.out.println(" Current Balance: "+rs.getDouble("balance"));
+                System.out.println("Current Balance: "+rs.getDouble("balance"));
             }
             else{
                 System.out.println("Invalid Security Pin!");
@@ -158,4 +158,11 @@ class AccountManager{
             System.out.println(e.getMessage());
         }
     }
+    public static String encryptSecurityPin(int num){
+        num+=4;
+        num=num*num;
+        StringBuilder pin=new StringBuilder(Integer.toString(num));
+        return pin.reverse().toString();
+    }
+
 }

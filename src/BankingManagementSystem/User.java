@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 class User{
-    private Connection con;
-    private Scanner sc;
+    private final Connection con;
+    private final Scanner sc;
     public User(java.sql.Connection con, Scanner sc){
         this.con=con;
         this.sc=sc;
@@ -31,7 +31,7 @@ class User{
             PreparedStatement stmt=con.prepareStatement(query);
             stmt.setString(1,fullName);
             stmt.setString(2,email);
-            stmt.setString(3,password);
+            stmt.setString(3,hexCode(password));
             int rowsAffected=stmt.executeUpdate();
             if(rowsAffected>0)
                 System.out.println("Registration Successfull!");
@@ -52,7 +52,7 @@ class User{
         try{
             PreparedStatement stmt=con.prepareStatement(query);
             stmt.setString(1,email);
-            stmt.setString(2,password);
+            stmt.setString(2,hexCode(password));
             ResultSet rs=stmt.executeQuery();
             if(rs.next())return email;
         }
@@ -73,5 +73,15 @@ class User{
                 System.out.println(e.getMessage());
             }
         return false;
+    }
+    public static String hexCode(String str){
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<str.length();i++){
+            char c=str.charAt(i);
+            int a=c-'0';
+            a=a%str.length()+97;
+            sb.append(Character.toString((char)a));
+        }
+        return sb.reverse().toString();
     }
 }

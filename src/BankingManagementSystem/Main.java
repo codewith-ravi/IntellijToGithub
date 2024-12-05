@@ -28,7 +28,9 @@ public class Main {
                     System.out.println("2. Login");
                     System.out.println("3. Exit");
                     System.out.print("Enter your choice: ");
+
                     int choice=sc.nextInt();
+
                     String email;
                     long accountNumber;
                     switch (choice){
@@ -44,6 +46,8 @@ public class Main {
                                     System.out.println();
                                     System.out.println("1. Open a new Bank Account");
                                     System.out.println("2. Exit");
+                                    System.out.print("Enter your choice: ");
+
                                     if(sc.nextInt()==1) {
                                         accountNumber = account.openAccount(email);
                                         System.out.println("Account Created Successfully");
@@ -60,9 +64,10 @@ public class Main {
                                     System.out.println("2. Credit Money");
                                     System.out.println("3. Transfer Money");
                                     System.out.println("4. Check Balance");
-                                    System.out.println("5. Log out");
+                                    System.out.println("5. Go Back");
                                     System.out.print("Enter your choice: ");
                                     choice2=sc.nextInt();
+
                                     switch (choice2){
                                         case 1:
                                             accountManager.debitMoney(accountNumber);
@@ -96,6 +101,7 @@ public class Main {
                             System.out.println("Enter Valid Choice!");
                     }
                 }
+
             }
             catch(SQLException e){
                 System.out.println(e.getMessage());

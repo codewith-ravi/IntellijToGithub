@@ -18,7 +18,7 @@ class Account{
                  double balance=sc.nextDouble();
                  sc.nextLine();
                  System.out.print("Enter Security Pin: ");
-                 String securityPin=sc.nextLine();
+                 int pin=sc.nextInt();
                  try{
                      long accountNumber=generateAccountNumber();
                      PreparedStatement stmt=con.prepareStatement(query);
@@ -26,7 +26,7 @@ class Account{
                      stmt.setString(2,fullName);
                      stmt.setString(3,email);
                      stmt.setDouble(4,balance);
-                     stmt.setString(5,securityPin);
+                     stmt.setString(5,AccountManager.encryptSecurityPin(pin));
                      int rowsAffected=stmt.executeUpdate();
                      if(rowsAffected>0)return accountNumber;
                      else
